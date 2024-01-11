@@ -14,7 +14,7 @@
 	<name>GnuTardBot</name>
 	<description>Moderation bot for gnutard chat</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -62,6 +62,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>gnutardbot</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.graalvm.buildtools</groupId>

@@ -29,7 +29,7 @@ public class TardBot extends AbilityBot {
             .toggle("report", "cmdList")
             .turnOff("commands");
     private static final String BOT_NAME = "GnuTardBot";
-    private static final DB db = DBMaker.fileDB(BOT_NAME)
+    private static final DB db = DBMaker.fileDB("/tmp/" + BOT_NAME)
             .fileMmapEnableIfSupported()
             .closeOnJvmShutdown()
             .transactionEnable()
