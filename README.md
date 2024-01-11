@@ -7,6 +7,7 @@ Features:
 2. Ban command
 3. Report command
 4. Nuke command
+5. Auto unpin channel's forwarded messages to a discussion group
 
 
 ## Building
