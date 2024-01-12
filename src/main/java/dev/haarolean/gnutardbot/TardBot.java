@@ -65,11 +65,6 @@ public class TardBot extends AbilityBot {
     }
 
     @Override
-    protected String getCommandPrefix() {
-        return "!";
-    }
-
-    @Override
     public Set<Long> admins() {
         return properties.getAdmins();
     }
