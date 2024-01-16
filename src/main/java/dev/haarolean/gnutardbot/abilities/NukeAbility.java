@@ -8,6 +8,7 @@ import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.MessageContext;
 import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
@@ -54,6 +55,9 @@ public class NukeAbility implements AbilityProvider {
                     .revokeMessages(true)
                     .build();
             bot.execute(request);
+
+            bot.execute(new DeleteMessage(chatId, reply.getMessageId()));
+
         } catch (TelegramApiException e) {
             log.error("Error", e);
         }
