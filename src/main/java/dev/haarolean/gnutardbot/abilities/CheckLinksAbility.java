@@ -55,7 +55,6 @@ public class CheckLinksAbility implements AbilityProvider {
 
         if (bot.isAdmin(senderId)) return;
         if (bot.isGroupAdmin(ctx.update(), senderId)) return;
-        if (Boolean.TRUE.equals(sender.getIsPremium())) return;
         if (memberUtils.isUserKnown(chatId, senderId)) return;
 
         var hasLink = message.getText().matches("https?://.*");
