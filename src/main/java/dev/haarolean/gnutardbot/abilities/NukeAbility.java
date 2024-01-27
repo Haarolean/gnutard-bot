@@ -56,11 +56,11 @@ public class NukeAbility implements AbilityProvider {
                     .build();
             bot.execute(request);
 
-            bot.execute(new DeleteMessage(chatId, reply.getMessageId()));
-
         } catch (TelegramApiException e) {
             log.error("Error", e);
         }
+
+        bot.silent().execute(new DeleteMessage(chatId, reply.getMessageId()));
     }
 
 }
