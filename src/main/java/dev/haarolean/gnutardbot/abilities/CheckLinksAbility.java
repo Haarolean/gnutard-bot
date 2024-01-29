@@ -2,6 +2,7 @@ package dev.haarolean.gnutardbot.abilities;
 
 import dev.haarolean.gnutardbot.TardBot;
 import dev.haarolean.gnutardbot.util.MemberUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.objects.*;
@@ -64,7 +65,7 @@ public class CheckLinksAbility implements AbilityProvider {
         var messageText = "Yo nibba, you triggered an anti spam thingy. " +
                 "No links are allowed if you're not in the chat group. " +
                 "Contact the admins if you're not a bot.";
-        var senderTag = !sender.getUserName().isEmpty() ? ("@" + sender.getUserName() + " ") : "";
+        var senderTag = StringUtils.isNotEmpty(sender.getUserName()) ? ("@" + sender.getUserName() + " ") : "";
         var replyMessage = bot.silent().forceReply(senderTag + messageText, message.getChatId());
 
         var banRequest = BanChatMember
