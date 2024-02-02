@@ -77,6 +77,7 @@ public class CheckLinksAbility implements AbilityProvider {
                 .userId(senderId)
                 .build();
 
+        bot.silent().execute(new DeleteMessage(chatId, message.getMessageId()));
         bot.silent().execute(banRequest);
         replyMessage.ifPresent(msg ->
                 bot.silent().execute(new DeleteMessage(chatId, msg.getMessageId())));
