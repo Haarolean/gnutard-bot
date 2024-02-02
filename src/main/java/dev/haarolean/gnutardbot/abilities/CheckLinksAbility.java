@@ -50,6 +50,9 @@ public class CheckLinksAbility implements AbilityProvider {
 
     private void checkLinks(MessageContext ctx) {
         var message = ctx.update().getMessage();
+        if (message == null) message = ctx.update().getEditedMessage();
+        if (message == null) return;
+
         var sender = message.getFrom();
         long senderId = sender.getId();
         var chatId = message.getChatId().toString();
