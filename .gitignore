@@ -26,3 +26,6 @@ nbdist/
 .mvn/
 mvnw
 mvnw.cmd
+
+gradle-wrapper.jar
+.gradle/
