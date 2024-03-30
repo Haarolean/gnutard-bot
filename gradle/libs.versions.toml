@@ -3,7 +3,6 @@
 
 [versions]
 io-micrometer-micrometer-registry-prometheus = "1.12.1"
-org-projectlombok-lombok = "1.18.30"
 org-springframework-boot-spring-boot-starter-actuator = "3.2.1"
 org-springframework-boot-spring-boot-starter-test = "3.2.1"
 org-springframework-boot-spring-boot-starter-validation = "3.2.1"
@@ -13,7 +12,6 @@ org-telegram-telegrambots-spring-boot-starter = "6.8.0"
 
 [libraries]
 io-micrometer-micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "io-micrometer-micrometer-registry-prometheus" }
-org-projectlombok-lombok = { module = "org.projectlombok:lombok", version.ref = "org-projectlombok-lombok" }
 org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot-spring-boot-starter-actuator" }
 org-springframework-boot-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "org-springframework-boot-spring-boot-starter-test" }
 org-springframework-boot-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "org-springframework-boot-spring-boot-starter-validation" }

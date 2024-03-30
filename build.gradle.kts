@@ -1,7 +1,14 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 group = "dev.haarolean.gnutardbot"
 version = "0.0.1-SNAPSHOT"
 description = "GnuTardBot"
+
 java.sourceCompatibility = JavaVersion.VERSION_17
+
+kotlin {
+    jvmToolchain(17)
+}
 
 configurations {
     compileOnly {
@@ -10,10 +17,10 @@ configurations {
 }
 
 plugins {
-    `java-library`
-    `maven-publish`
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.spring") version "1.9.23"
 }
 
 repositories {
@@ -26,25 +33,26 @@ dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.validation)
     implementation(libs.org.springframework.boot.spring.boot.starter.web)
 
-    compileOnly(libs.org.projectlombok.lombok)
-    annotationProcessor(libs.org.projectlombok.lombok)
-
     implementation(libs.org.telegram.telegrambots.spring.boot.starter)
     implementation(libs.org.telegram.telegrambots.abilities)
 
+//    runtimeOnly(libs.io.micrometer.micrometer.registry.prometheus)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+
 }
 
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "17"
     }
 }
 
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
-}
-
-tasks.withType<Javadoc>() {
-    options.encoding = "UTF-8"
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
