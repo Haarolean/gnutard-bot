@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "dev.haarolean.gnutardbot"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 description = "GnuTardBot"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -52,6 +52,12 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "17"
     }
 }
+
+tasks.bootJar {
+    archiveFileName.set("gnutardbot.jar")
+}
+
+// Tests
 
 tasks.withType<Test> {
     useJUnitPlatform()

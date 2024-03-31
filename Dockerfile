@@ -41,7 +41,7 @@ EXPOSE 8080
 
 VOLUME config
 
-COPY --from=builder /build/target/gnutardbot.jar "/gnutardbot.jar"
+COPY --from=builder /build/build/libs/gnutardbot.jar "/gnutardbot.jar"
 
 CMD java -jar gnutardbot.jar
 
