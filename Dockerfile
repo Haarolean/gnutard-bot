@@ -6,39 +6,26 @@ RUN microdnf update \
  && microdnf install --nodocs \
     tar \
     gzip \
+    zip \
+    unzip \
  && microdnf clean all \
  && rm -rf /var/cache/yum
 
 ARG USER_HOME_DIR="/root"
 
-RUN <<EOF
+RUN curl -s "https://get.sdkman.io" | bash
 
-mkdir /opt/maven
+SHELL ["/bin/bash", "-c"]
 
-maven_version=$(curl -fsSL https://repo1.maven.org/maven2/org/apache/maven/apache-maven/maven-metadata.xml  \
-      | grep -Ev "alpha|beta" \
-      | grep -oP '(?<=version>).*(?=</version)'  \
-      | tail -n1)
+RUN source "/root/.sdkman/bin/sdkman-init.sh" && sdk install gradle 8.7
 
-maven_download_url="https://repo1.maven.org/maven2/org/apache/maven/apache-maven/$maven_version/apache-maven-${maven_version}-bin.tar.gz"
-
-echo "Downloading [$maven_download_url]..."
-
-curl -fL $maven_download_url | tar zxv -C /opt/maven --strip-components=1
-
-EOF
-
-ENV MAVEN_HOME /opt/maven
-ENV M2_HOME /opt/maven
-ENV PATH="/opt/maven/bin:${PATH}"
-
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+ENV PATH="$PATH:/root/.sdkman/candidates/gradle/current/bin"
 
 WORKDIR /build
 
 COPY . /build
 
-RUN mvn -DskipTests --no-transfer-progress clean package
+RUN gradle build
 
 ################################################################################################
 
@@ -54,8 +41,7 @@ EXPOSE 8080
 
 VOLUME config
 
-#COPY --from=builder /build/target/core /kapybro
-COPY --from=builder /build/target/gnutardbot.jar "/gnutardbot.jar"
+COPY --from=builder /build/build/libs/gnutardbot.jar "/gnutardbot.jar"
 
 CMD java -jar gnutardbot.jar
 
