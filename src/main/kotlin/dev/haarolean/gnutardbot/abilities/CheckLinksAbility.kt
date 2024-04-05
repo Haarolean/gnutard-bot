@@ -36,7 +36,8 @@ class CheckLinksAbility(private val bot: TardBot) : AbilityProvider {
         // https://github.com/rubenlagus/TelegramBots/issues/1296
         val update = ctx.update()
         if (!AbilityUtils.isUserMessage(update)) return true
-        return if (Flag.MESSAGE.test(update) || Flag.EDITED_MESSAGE.test(update)) false else false
+        if (Flag.MESSAGE.test(update) || Flag.EDITED_MESSAGE.test(update)) return false
+        return true
     }
 
     private fun checkLinks(ctx: MessageContext) {
