@@ -55,9 +55,10 @@ class TardBot(val properties: BotProperties)
     }
 
     @Suppress("unused")
-    fun checkLinks(): Ability {
-        return CheckLinksAbility(this).buildAbility()
+    fun default(): Ability {
+        return DefaultAbility(this).buildAbility()
     }
+
 
     @Suppress("unused")
     fun report(): Ability {
