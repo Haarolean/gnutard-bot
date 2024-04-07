@@ -1,9 +1,6 @@
 package dev.haarolean.gnutardbot
 
-import dev.haarolean.gnutardbot.abilities.BanAbility
-import dev.haarolean.gnutardbot.abilities.CheckLinksAbility
-import dev.haarolean.gnutardbot.abilities.NukeAbility
-import dev.haarolean.gnutardbot.abilities.ReportMessageAbility
+import dev.haarolean.gnutardbot.abilities.*
 import dev.haarolean.gnutardbot.app.props.BotProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.mapdb.DBMaker.fileDB
@@ -40,7 +37,7 @@ class TardBot(val properties: BotProperties)
     }
 
     override fun creatorId(): Long {
-        return 177742375 // @haarolean
+        return properties.creatorId //@haarolean was here
     }
 
     override fun onRegister() {
