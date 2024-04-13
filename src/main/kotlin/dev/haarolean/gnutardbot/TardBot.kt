@@ -12,9 +12,7 @@ import org.telegram.abilitybots.api.objects.Ability
 import org.telegram.abilitybots.api.objects.MessageContext
 import org.telegram.abilitybots.api.toggle.CustomToggle
 import org.telegram.telegrambots.meta.TelegramBotsApi
-import org.telegram.telegrambots.meta.api.methods.pinnedmessages.UnpinChatMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
-import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import kotlin.Long
@@ -68,18 +66,6 @@ class TardBot(val properties: BotProperties)
     @Suppress("unused")
     fun nuke(): Ability {
         return NukeAbility(this).buildAbility()
-    }
-
-    override fun onUpdateReceived(update: Update) {
-        unpinDiscussion(update) // can't have multiple default abilities, https://github.com/rubenlagus/TelegramBots/issues/1296
-        super.onUpdateReceived(update)
-    }
-
-    private fun unpinDiscussion(update: Update) {
-        if (!update.hasMessage()) return
-        val message = update.message
-        if (message.isAutomaticForward != true) return
-        silent().execute(UnpinChatMessage(message.chatId.toString(), message.messageId))
     }
 
     fun deleteMessage(ctx: MessageContext) {

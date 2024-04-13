@@ -29,8 +29,10 @@ class NukeAbility(private val bot: TardBot) : AbilityProvider {
                 .build()
     }
 
+
     private fun nuke(ctx: MessageContext) {
         val message = ctx.update().message
+
         val reply = message.replyToMessage ?: return
         val target = reply.from
         if (bot.isAdmin(target.id)) return

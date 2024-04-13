@@ -31,16 +31,17 @@ class BanAbility(private val bot: TardBot) : AbilityProvider {
 
     private fun ban(ctx: MessageContext) {
         val message = ctx.update().message
-        val reply = message.replyToMessage ?: return
-        val bannee = reply.from
-        if (bot.isAdmin(bannee.id)) return
-        if (bot.isGroupAdmin(ctx.update(), bannee.id)) return
+        val reply = message.replyToMessage
+        if(reply == null) return
+        val targetToBan = reply.from
+        if (bot.isAdmin(targetToBan.id)) return
+        if (bot.isGroupAdmin(ctx.update(), targetToBan.id)) return
         val chatId = message.chatId.toString()
         try {
             val banRequest = BanChatMember
                     .builder()
                     .chatId(chatId)
-                    .userId(bannee.id)
+                    .userId(targetToBan.id)
                     .revokeMessages(false)
                     .build()
             bot.execute(banRequest)
