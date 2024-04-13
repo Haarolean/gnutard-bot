@@ -8,5 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class BotProperties(
      val token:  String,
      val chatId: String,
-     val admins: Set<Long>
+     val admins: Set<Long>,
+     val allowedSenderChatsUsernames: Set<String>,
+     val creatorId: Long
 )
