@@ -19,37 +19,36 @@ class BanAbility(private val bot: TardBot) : AbilityProvider {
 
     override fun buildAbility(): Ability {
         return Ability
-                .builder()
-                .name("ban")
-                .info("ban")
-                .locality(Locality.GROUP)
-                .privacy(Privacy.ADMIN)
-                .action { ctx: MessageContext -> ban(ctx) }
-                .post { ctx: MessageContext -> bot.deleteMessage(ctx) }
-                .build()
+            .builder()
+            .name("ban")
+            .info("ban")
+            .locality(Locality.GROUP)
+            .privacy(Privacy.ADMIN)
+            .action { ban(it) }
+            .post { bot.deleteMessage(it) }
+            .build()
     }
 
     private fun ban(ctx: MessageContext) {
         val message = ctx.update().message
-        val reply = message.replyToMessage
-        if(reply == null) return
+        val reply = message.replyToMessage ?: return
         val targetToBan = reply.from
         if (bot.isAdmin(targetToBan.id)) return
         if (bot.isGroupAdmin(ctx.update(), targetToBan.id)) return
         val chatId = message.chatId.toString()
         try {
             val banRequest = BanChatMember
-                    .builder()
-                    .chatId(chatId)
-                    .userId(targetToBan.id)
-                    .revokeMessages(false)
-                    .build()
+                .builder()
+                .chatId(chatId)
+                .userId(targetToBan.id)
+                .revokeMessages(false)
+                .build()
             bot.execute(banRequest)
             val deleteRequest = DeleteMessage
-                    .builder()
-                    .chatId(chatId)
-                    .messageId(message.messageId)
-                    .build()
+                .builder()
+                .chatId(chatId)
+                .messageId(message.messageId)
+                .build()
             bot.silent().execute(deleteRequest)
         } catch (e: TelegramApiException) {
             logger.error(e) { "Error" }

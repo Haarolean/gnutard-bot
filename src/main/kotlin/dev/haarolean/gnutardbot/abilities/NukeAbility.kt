@@ -19,20 +19,19 @@ class NukeAbility(private val bot: TardBot) : AbilityProvider {
 
     override fun buildAbility(): Ability {
         return Ability
-                .builder()
-                .name("spam")
-                .info("Nuke spammer")
-                .locality(Locality.GROUP)
-                .privacy(Privacy.ADMIN)
-                .action { ctx: MessageContext -> nuke(ctx) }
-                .post { ctx: MessageContext -> bot.deleteMessage(ctx) }
-                .build()
+            .builder()
+            .name("nuke")
+            .info("Nuke spammer")
+            .locality(Locality.ALL)
+            .privacy(Privacy.ADMIN)
+            .action { nuke(it) }
+            .post { bot.deleteMessage(it) }
+            .build()
     }
 
 
     private fun nuke(ctx: MessageContext) {
         val message = ctx.update().message
-
         val reply = message.replyToMessage ?: return
         val target = reply.from
         if (bot.isAdmin(target.id)) return
@@ -40,11 +39,11 @@ class NukeAbility(private val bot: TardBot) : AbilityProvider {
         val chatId = message.chatId.toString()
         try {
             val request = BanChatMember
-                    .builder()
-                    .chatId(chatId)
-                    .userId(target.id)
-                    .revokeMessages(true)
-                    .build()
+                .builder()
+                .chatId(chatId)
+                .userId(target.id)
+                .revokeMessages(true)
+                .build()
             bot.execute(request)
         } catch (e: TelegramApiException) {
             logger.error(e) { "Error" }

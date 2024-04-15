@@ -8,7 +8,7 @@ import org.telegram.abilitybots.api.objects.*
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-class DefaultAbility(private val bot: TardBot) : AbilityProvider {
+class DefaultAbility(bot: TardBot) : AbilityProvider {
     private val abilities: MutableList<AbilityHandler> = mutableListOf(
         TrollingAbility(bot),
         CheckLinksAbility(bot),
@@ -16,14 +16,14 @@ class DefaultAbility(private val bot: TardBot) : AbilityProvider {
 
     override fun buildAbility(): Ability {
         return Ability
-                .builder()
-                .name("default")
-                .locality(Locality.ALL)
-                .privacy(Privacy.PUBLIC)
-                .action {
-                   handle(it)
-                }
-                .build()
+            .builder()
+            .name("default")
+            .locality(Locality.ALL)
+            .privacy(Privacy.PUBLIC)
+            .action {
+                handle(it)
+            }
+            .build()
     }
 
     private fun handle(context: MessageContext) {
