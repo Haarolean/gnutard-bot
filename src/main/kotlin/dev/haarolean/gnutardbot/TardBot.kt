@@ -1,6 +1,9 @@
 package dev.haarolean.gnutardbot
 
-import dev.haarolean.gnutardbot.abilities.*
+import dev.haarolean.gnutardbot.abilities.BanAbility
+import dev.haarolean.gnutardbot.abilities.DefaultAbility
+import dev.haarolean.gnutardbot.abilities.NukeAbility
+import dev.haarolean.gnutardbot.abilities.ReportMessageAbility
 import dev.haarolean.gnutardbot.app.props.BotProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.mapdb.DBMaker.fileDB
@@ -15,15 +18,12 @@ import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
-import kotlin.Long
-import kotlin.Suppress
 
 private val logger = KotlinLogging.logger {}
 
 @Component
 @EnableConfigurationProperties(BotProperties::class)
-class TardBot(val properties: BotProperties)
-    : AbilityBot(properties.token, BOT_NAME, MapDBContext(db), toggle) {
+class TardBot(val properties: BotProperties) : AbilityBot(properties.token, BOT_NAME, MapDBContext(db), toggle) {
 
     init {
         try {
@@ -72,24 +72,24 @@ class TardBot(val properties: BotProperties)
         val message = ctx.update().message
         val chatId = message.chatId.toString()
         val request = DeleteMessage
-                .builder()
-                .chatId(chatId)
-                .messageId(message.messageId)
-                .build()
+            .builder()
+            .chatId(chatId)
+            .messageId(message.messageId)
+            .build()
         silent().execute(request)
     }
 
     companion object {
         private val toggle = CustomToggle()
-                .toggle("ban", "botBan")
-                .toggle("unban", "botUnban")
-                .toggle("report", "cmdList")
-                .turnOff("commands")
+            .toggle("ban", "botBan")
+            .toggle("unban", "botUnban")
+            .toggle("report", "cmdList")
+            .turnOff("commands")
         private const val BOT_NAME = "GnuTardBot"
         private val db = fileDB("/tmp/$BOT_NAME")
-                .fileMmapEnableIfSupported()
-                .closeOnJvmShutdown()
-                .transactionEnable()
-                .make()
+            .fileMmapEnableIfSupported()
+            .closeOnJvmShutdown()
+            .transactionEnable()
+            .make()
     }
 }

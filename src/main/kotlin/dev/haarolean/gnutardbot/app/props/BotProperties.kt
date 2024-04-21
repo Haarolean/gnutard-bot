@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 //@Configuration
 //@Validated
 data class BotProperties(
-     val token:  String,
-     val chatId: String,
-     val admins: Set<Long>,
-     val creatorId: Long
+    val token: String,
+    val chatId: String,
+    val admins: Set<Long>,
+    val creatorId: Long
 )

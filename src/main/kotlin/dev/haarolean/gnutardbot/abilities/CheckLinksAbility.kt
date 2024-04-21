@@ -1,15 +1,20 @@
 package dev.haarolean.gnutardbot.abilities
 
 import dev.haarolean.gnutardbot.TardBot
+import dev.haarolean.gnutardbot.util.MemberUtils
+import org.springframework.beans.factory.config.BeanDefinition
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 import org.telegram.abilitybots.api.objects.MessageContext
 import org.telegram.abilitybots.api.util.AbilityUtils
 import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Message
-import dev.haarolean.gnutardbot.util.MemberUtils
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import java.util.regex.Pattern
 
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 class CheckLinksAbility(private val bot: TardBot) : AbilityHandler {
     private val linkPattern = Pattern.compile(".*https?://.*")
     private val memberUtils: MemberUtils = (MemberUtils(bot))

@@ -4,7 +4,10 @@ import dev.haarolean.gnutardbot.TardBot
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import org.telegram.abilitybots.api.objects.*
+import org.telegram.abilitybots.api.objects.Ability
+import org.telegram.abilitybots.api.objects.Locality
+import org.telegram.abilitybots.api.objects.MessageContext
+import org.telegram.abilitybots.api.objects.Privacy
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -12,7 +15,8 @@ class DefaultAbility(bot: TardBot) : AbilityProvider {
     private val abilities: MutableList<AbilityHandler> = mutableListOf(
         TrollingAbility(bot),
         CheckLinksAbility(bot),
-        UnpinDiscussionAbility(bot)) //Our "default" abilities
+        UnpinDiscussionAbility(bot)
+    ) //Our "default" abilities
 
     override fun buildAbility(): Ability {
         return Ability
@@ -30,7 +34,8 @@ class DefaultAbility(bot: TardBot) : AbilityProvider {
         abilities
             .stream()
             .filter { it.isApplicable(context) }
-            .findFirst()
-            .ifPresent { it.handle(context) }
+            .forEach {
+                it.handle(context)
+            }
     }
 }

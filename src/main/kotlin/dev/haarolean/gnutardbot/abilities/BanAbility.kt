@@ -4,6 +4,7 @@ import dev.haarolean.gnutardbot.TardBot
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 import org.telegram.abilitybots.api.objects.Ability
 import org.telegram.abilitybots.api.objects.Locality
 import org.telegram.abilitybots.api.objects.MessageContext
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 private val logger = KotlinLogging.logger {}
 
+@Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 class BanAbility(private val bot: TardBot) : AbilityProvider {
 

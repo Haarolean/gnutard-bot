@@ -1,11 +1,13 @@
 package dev.haarolean.gnutardbot.abilities
 
 import dev.haarolean.gnutardbot.TardBot
+import org.springframework.beans.factory.config.BeanDefinition
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 import org.telegram.abilitybots.api.objects.MessageContext
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 import java.util.regex.Pattern
-import kotlin.random.Random
 
 private val replyMessages = arrayOf(
     "Windows? I'd rather deal with a real window... at least it's transparent!",
@@ -15,6 +17,9 @@ private val replyMessages = arrayOf(
     "Did someone say windows? I'd rather jump out of one than use it!",
     "Oh, 'windows'. The only thing that crashes more than my code."
 )
+
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 class TrollingAbility(private val bot: TardBot) : AbilityHandler {
     private val windowsPattern = Pattern.compile(".*windows.*")
 
@@ -25,9 +30,9 @@ class TrollingAbility(private val bot: TardBot) : AbilityHandler {
             update.hasEditedMessage() -> update.editedMessage
             else -> return false
         }
-        if(update.message.isUserMessage) return false
-        if(update.message.isChannelMessage) return false
-        if(!message.hasText()) return false
+        if (update.message.isUserMessage) return false
+        if (update.message.isChannelMessage) return false
+        if (!message.hasText()) return false
         return windowsPattern.matcher(message.text).matches()
     }
 
@@ -40,7 +45,7 @@ class TrollingAbility(private val bot: TardBot) : AbilityHandler {
         if (!ctx.update().hasMessage()) message = ctx.update().editedMessage
         val chatId = message.chatId
         val messageId = message.messageId
-        val messageText = replyMessages[Random.nextInt(replyMessages.size - 1)]
+        val messageText = replyMessages.random()
         val replyRequest = SendMessage
             .builder()
             .replyToMessageId(messageId)
