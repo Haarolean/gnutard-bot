@@ -13,7 +13,7 @@ class UnpinDiscussionAbility(private val bot: TardBot) : AbilityHandler {
     override fun isApplicable(ctx: MessageContext): Boolean {
         if (!ctx.update().hasMessage()) return false
         val message = ctx.update().message
-        return message.isAutomaticForward == true
+        return message.isAutomaticForward == true;
     }
 
     override fun handle(ctx: MessageContext) {
