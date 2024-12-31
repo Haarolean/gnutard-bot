@@ -2,21 +2,23 @@ package dev.haarolean.gnutardbot.abilities
 
 import dev.haarolean.gnutardbot.TardBot
 import dev.haarolean.gnutardbot.util.MemberUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import org.telegram.abilitybots.api.objects.MessageContext
 import org.telegram.abilitybots.api.util.AbilityUtils
-import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Message
-import java.util.regex.Pattern
+import kotlin.time.Duration.Companion.seconds
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 class CheckLinksAbility(private val bot: TardBot) : AbilityHandler {
-    private val linkPattern = Pattern.compile(".*https?://.*")
     private val memberUtils: MemberUtils = (MemberUtils(bot))
 
     override fun isApplicable(ctx: MessageContext): Boolean {
@@ -33,7 +35,10 @@ class CheckLinksAbility(private val bot: TardBot) : AbilityHandler {
         if (bot.isAdmin(senderId)) return false
         if (bot.isGroupAdmin(ctx.update(), senderId)) return false
         if (memberUtils.isUserKnown(chatId, senderId)) return false
-        return linkPattern.matcher(message.text).matches()
+
+        if (!message.hasEntities()) return false
+
+        return message.entities.stream().anyMatch { it.type == "url" || it.type == "text_link" }
     }
 
     override fun handle(ctx: MessageContext) {
@@ -43,26 +48,37 @@ class CheckLinksAbility(private val bot: TardBot) : AbilityHandler {
     private fun checkLinks(ctx: MessageContext) {
         var message = ctx.update().message
         if (!ctx.update().hasMessage()) message = ctx.update().editedMessage
-        val sender = message.from
-        val senderId = sender.id
         val chatId = message.chatId.toString()
-        val messageText = "Yo nibba, you triggered an anti spam thingy. " +
-                "No links are allowed if you're not in the chat group. " +
-                "Contact the admins if you're not a bot."
+
+        val sender = message.from
+        val senderName = escapeMarkdownV2(sender.firstName + " " + (sender.lastName ?: ""))
+        val mention = "[${senderName}](tg://user?id=${message.from.id})"
+
+        val messageText = "$mention, the link has been removed" +
+                " as no links are allowed if you're not a member of the chat group"
+
         val replyRequest = SendMessage
             .builder()
             .replyToMessageId(message.messageId)
             .chatId(chatId)
             .text(messageText)
-            .build()
-        val banRequest = BanChatMember
-            .builder()
-            .chatId(chatId)
-            .userId(senderId)
+            .parseMode("MarkdownV2")
             .build()
         val replyMessage = bot.silent().execute(replyRequest)
+
         bot.silent().execute(DeleteMessage(chatId, message.messageId))
-        bot.silent().execute(banRequest)
-        replyMessage.ifPresent { bot.silent().execute(DeleteMessage(chatId, it.messageId)) }
+
+        replyMessage.ifPresent {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(60.seconds)
+                bot.silent().execute(DeleteMessage(chatId, it.messageId))
+            }
+        }
     }
+
+    fun escapeMarkdownV2(text: String): String {
+        val specialCharacters = "_*[]()~`>#+-=|{}.!"
+        return text.map { if (it in specialCharacters) "\\$it" else it }.joinToString("")
+    }
+
 }
