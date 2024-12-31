@@ -15,8 +15,8 @@ class DefaultAbility(bot: TardBot) : AbilityProvider {
     private val abilities: MutableList<AbilityHandler> = mutableListOf(
         TrollingAbility(bot),
         CheckLinksAbility(bot),
-        UnpinDiscussionAbility(bot)
-    ) //Our "default" abilities
+        UnpinDiscussionAbility(bot),
+        BanSenderChatMessagesAbility(bot)) //Our "default" abilities
 
     override fun buildAbility(): Ability {
         return Ability
