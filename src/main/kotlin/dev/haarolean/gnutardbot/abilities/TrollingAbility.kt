@@ -30,8 +30,8 @@ class TrollingAbility(private val bot: TardBot) : AbilityHandler {
             update.hasEditedMessage() -> update.editedMessage
             else -> return false
         }
-        if (update.message.isUserMessage) return false
-        if (update.message.isChannelMessage) return false
+        if (message.isUserMessage) return false
+        if (message.isChannelMessage) return false
         if (!message.hasText()) return false
         return windowsPattern.matcher(message.text).matches()
     }
