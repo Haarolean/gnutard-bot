@@ -30,7 +30,6 @@ class TrollingAbility(private val bot: TardBot) : AbilityHandler {
         val update = ctx.update()
         val message: Message = when {
             update.hasMessage() -> update.message
-            update.hasEditedMessage() -> update.editedMessage
             else -> {
                 logger.debug { "TrollingAbility: update ${update.updateId} has no message or editedMessage, skipping" }
                 return false
