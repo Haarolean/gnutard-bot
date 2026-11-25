@@ -4,6 +4,7 @@ import dev.haarolean.gnutardbot.abilities.BanAbility
 import dev.haarolean.gnutardbot.abilities.DefaultAbility
 import dev.haarolean.gnutardbot.abilities.NukeAbility
 import dev.haarolean.gnutardbot.abilities.ReportMessageAbility
+import dev.haarolean.gnutardbot.ai.AiService
 import dev.haarolean.gnutardbot.app.props.BotProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.mapdb.DBMaker.fileDB
@@ -23,7 +24,7 @@ private val logger = KotlinLogging.logger {}
 
 @Component
 @EnableConfigurationProperties(BotProperties::class)
-class TardBot(val properties: BotProperties) : AbilityBot(properties.token, BOT_NAME, MapDBContext(db), toggle) {
+class TardBot(val properties: BotProperties, val ai: AiService) : AbilityBot(properties.token, BOT_NAME, MapDBContext(db), toggle) {
 
     init {
         try {
